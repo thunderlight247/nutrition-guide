@@ -6,6 +6,7 @@ import CallButton from "@/components/CallButton";
 import BusinessHours from "@/components/BusinessHours";
 import SocialLinks from "@/components/SocialLinks";
 import { buildEmailLink } from "@/lib/links";
+import ContactForm from "@/components/ContactForm";
 
 const cards = [
   {
@@ -70,6 +71,14 @@ export default function Contact() {
         <div className="mt-14 flex flex-col gap-3 sm:flex-row">
           <WhatsAppButton ctaId="contact-primary" />
           <CallButton ctaId="contact-primary" variant="solid" />
+        </div>
+
+        <div className="mt-12 max-w-3xl rounded-2xl bg-cream p-6 shadow-sm shadow-cocoa/[0.04] ring-1 ring-cocoa/8 sm:p-8">
+          <h3 className="font-display text-2xl font-medium">Send us a message</h3>
+          <p className="mt-2 text-[15px] leading-relaxed text-stone">
+            Tell us a little about yourself and how we can help.
+          </p>
+          <ContactForm />
         </div>
 
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">

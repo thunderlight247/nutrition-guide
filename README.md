@@ -23,8 +23,15 @@ Then open http://localhost:3000.
    `nutrition-guide-by-small-madam.vercel.app` — share that with the
    client for review.
 
-No database, backend, authentication, or payment processing is used —
-this is a frontend-only marketing site by design.
+The contact form sends submissions through Resend. Configure these
+server-only environment variables locally and in the production host:
+
+- `RESEND_API_KEY` — a Resend API key.
+- `CONTACT_FROM_EMAIL` — a sender address verified with Resend.
+
+The recipient is the business email in `src/data/business.ts`. Without
+the required Resend configuration, the form reports that it is unavailable
+and does not redirect to the contact success page.
 
 ## Editing business information
 
