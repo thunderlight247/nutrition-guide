@@ -1,11 +1,12 @@
 import { MessageCircle } from "lucide-react";
-import { buildWhatsAppLink } from "@/lib/links";
+import { buildWhatsAppLink, buildWhatsAppRedirectLink } from "@/lib/links";
 
 type Props = {
   label?: string;
   message?: string;
   variant?: "solid" | "outline" | "light";
   className?: string;
+  destination?: "thank-you" | "whatsapp";
   /** Identifies this CTA's placement for future conversion-tracking hooks. */
   ctaId: string;
 };
@@ -15,6 +16,7 @@ export default function WhatsAppButton({
   message,
   variant = "solid",
   className = "",
+  destination = "thank-you",
   ctaId,
 }: Props) {
   const base =
@@ -31,9 +33,13 @@ export default function WhatsAppButton({
 
   return (
     <a
-      href={buildWhatsAppLink(message)}
-      target="_blank"
-      rel="noopener noreferrer"
+      href={
+        destination === "whatsapp"
+          ? buildWhatsAppLink(message)
+          : buildWhatsAppRedirectLink(message)
+      }
+      target={destination === "whatsapp" ? "_blank" : undefined}
+      rel={destination === "whatsapp" ? "noopener noreferrer" : undefined}
       data-cta="whatsapp"
       data-cta-id={ctaId}
       className={`${base} ${variants[variant]} ${className}`}

@@ -11,6 +11,11 @@ export function buildWhatsAppLink(message?: string) {
   return `https://wa.me/${number}?text=${text}`;
 }
 
+export function buildWhatsAppRedirectLink(message?: string) {
+  if (!message) return "/thank-you";
+  return `/thank-you?message=${encodeURIComponent(message)}`;
+}
+
 export function buildTelLink() {
   return `tel:${business.phoneIntl}`;
 }

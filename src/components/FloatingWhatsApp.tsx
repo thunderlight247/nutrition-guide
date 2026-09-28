@@ -1,12 +1,10 @@
 import { MessageCircle } from "lucide-react";
-import { buildWhatsAppLink } from "@/lib/links";
+import { buildWhatsAppRedirectLink } from "@/lib/links";
 
 export default function FloatingWhatsApp() {
   return (
     <a
-      href={buildWhatsAppLink()}
-      target="_blank"
-      rel="noopener noreferrer"
+      href={buildWhatsAppRedirectLink()}
       data-cta="whatsapp"
       data-cta-id="floating"
       aria-label="Chat on WhatsApp"

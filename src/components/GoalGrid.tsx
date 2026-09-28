@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { ProductGoal } from "@/data/business";
-import { buildWhatsAppLink } from "@/lib/links";
+import { buildWhatsAppRedirectLink } from "@/lib/links";
 import GoalTile from "@/components/GoalTile";
 
 // Icon components can't be passed as props from a server component, so the
@@ -153,11 +153,9 @@ export default function GoalGrid({ goals }: Props) {
               </p>
 
               <a
-                href={buildWhatsAppLink(
+                href={buildWhatsAppRedirectLink(
                   `Hello Small Madam, I'm interested in ${active.title}. Can you tell me more?`
                 )}
-                target="_blank"
-                rel="noopener noreferrer"
                 data-cta="whatsapp"
                 data-cta-id={`product-${active.id}`}
                 className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full bg-moss px-6 py-3.5 text-[15px] font-medium text-ivory shadow-lg shadow-moss/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-moss-dark hover:shadow-xl active:scale-[0.98] sm:w-auto"
