@@ -1,21 +1,33 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import type { Metadata } from 'next'
 import { client } from '@/sanity/client'
 import { postsQuery } from '@/sanity/queries'
 import { urlFor } from '@/sanity/image'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-import WhatsAppButton from '@/components/WhatsAppButton'
 
 export const revalidate = 60 // Revalidate page every 60 seconds
+
+export const metadata: Metadata = {
+  title: 'Nutrition & Wellness Blog in Ghana',
+  description:
+    'Practical nutrition, healthy eating, and wellness advice for everyday life in Ghana.',
+  alternates: {
+    canonical: '/blog',
+  },
+  openGraph: {
+    title: 'Nutrition & Wellness Blog in Ghana',
+    description:
+      'Practical nutrition, healthy eating, and wellness advice for everyday life in Ghana.',
+    url: '/blog',
+    type: 'website',
+  },
+}
 
 export default async function BlogIndexPage() {
   const posts = await client.fetch(postsQuery)
 
   return (
-    <main className="min-h-screen bg-gray-50 flex flex-col">
-      <Header />
-      
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <div className="flex-grow container mx-auto px-4 py-12 max-w-6xl">
         <div className="text-center mb-12">
           <span className="text-green-600 font-semibold uppercase tracking-wider text-sm">Expert Advice & Insights</span>
@@ -74,8 +86,6 @@ export default async function BlogIndexPage() {
           </div>
         )}
       </div>
-
-      <Footer />
-    </main>
+    </div>
   )
 }

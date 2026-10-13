@@ -1,18 +1,49 @@
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { PortableText } from '@portabletext/react'
 import { client } from '@/sanity/client'
 import { postQuery, postSlugsQuery } from '@/sanity/queries'
 import { urlFor } from '@/sanity/image'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
 
 export const revalidate = 60
 
 export async function generateStaticParams() {
   const slugs = await client.fetch(postSlugsQuery)
   return slugs.map((slug: string) => ({ slug }))
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string }
+}): Promise<Metadata> {
+  const post = await client.fetch(postQuery, { slug: params.slug })
+
+  if (!post) {
+    return {}
+  }
+
+  const description =
+    post.excerpt ||
+    `Read ${post.title} on nutrition, healthy eating, and wellness in Ghana.`
+  const image = post.mainImage ? urlFor(post.mainImage).url() : undefined
+
+  return {
+    title: `${post.title} | Nutrition Guide Blog`,
+    description,
+    alternates: {
+      canonical: `/blog/${params.slug}`,
+    },
+    openGraph: {
+      title: post.title,
+      description,
+      url: `/blog/${params.slug}`,
+      type: 'article',
+      ...(image && { images: [image] }),
+    },
+  }
 }
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
@@ -27,9 +58,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   )}`
 
   return (
-    <main className="min-h-screen bg-gray-50 flex flex-col">
-      <Header />
-
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <article className="flex-grow container mx-auto px-4 py-12 max-w-3xl">
         <div className="mb-6">
           <Link href="/blog" className="text-sm font-medium text-green-600 hover:underline">
@@ -96,8 +125,6 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           </a>
         </div>
       </article>
-
-      <Footer />
-    </main>
+    </div>
   )
 }

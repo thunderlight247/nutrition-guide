@@ -12,8 +12,14 @@ export const postQuery = `*[_type == "post" && slug.current == $slug][0] {
   title,
   slug,
   publishedAt,
+  excerpt,
   mainImage,
   body
 }`
 
 export const postSlugsQuery = `*[_type == "post" && defined(slug.current)][].slug.current`
+
+export const postsSitemapQuery = `*[_type == "post" && defined(slug.current)] {
+  "slug": slug.current,
+  publishedAt
+}`
