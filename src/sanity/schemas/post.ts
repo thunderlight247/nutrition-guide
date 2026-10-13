@@ -1,15 +1,17 @@
-export default {
+import { defineType, defineField } from 'sanity'
+
+export default defineType({
   name: 'post',
   title: 'Blog Post',
   type: 'document',
   fields: [
-    {
+    defineField({
       name: 'title',
       title: 'Title',
       type: 'string',
-      validation: (Rule: any) => Rule.required(),
-    },
-    {
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
@@ -17,30 +19,29 @@ export default {
         source: 'title',
         maxLength: 96,
       },
-      validation: (Rule: any) => Rule.required(),
-    },
-    {
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
       name: 'publishedAt',
-      title: 'Published At',
+      title: 'Published at',
       type: 'datetime',
-      validation: (Rule: any) => Rule.required(),
-    },
-    {
+      initialValue: () => new Date().toISOString(),
+    }),
+    defineField({
       name: 'mainImage',
-      title: 'Main Image',
+      title: 'Main image',
       type: 'image',
       options: {
         hotspot: true,
       },
-    },
-    {
+    }),
+    defineField({
       name: 'excerpt',
       title: 'Excerpt',
       type: 'text',
       rows: 3,
-      description: 'Short summary for SEO and blog cards',
-    },
-    {
+    }),
+    defineField({
       name: 'body',
       title: 'Body',
       type: 'array',
@@ -51,6 +52,6 @@ export default {
           options: { hotspot: true },
         },
       ],
-    },
+    }),
   ],
-}
+})

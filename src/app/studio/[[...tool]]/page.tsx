@@ -1,8 +1,12 @@
 'use client'
 
 import { NextStudio } from 'next-sanity/studio'
-import config from '../../../../sanity.config' // Adjust relative path based on where you place this file
+import config from '../../../../sanity.config'
 
 export default function StudioPage() {
-  return <NextStudio config={config} />
+  return (
+    <div className="fixed inset-0 z-50 overflow-hidden bg-white">
+      <NextStudio config={config} />
+    </div>
+  )
 }
