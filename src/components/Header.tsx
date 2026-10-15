@@ -10,6 +10,7 @@ const navItems = [
   { label: "About", href: "#about" },
   { label: "Services", href: "#services" },
   { label: "Wellness", href: "#wellness" },
+  { label: "Portion Checker", href: "https://opal.google/app/10wG_g8VtnixPF8Mv4bSQK6kgzQary1rV", external: true },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "#contact" },
 ];
@@ -55,6 +56,8 @@ export default function Header() {
             <a
               key={item.href}
               href={item.href}
+              target={item.external ? "_blank" : undefined}
+              rel={item.external ? "noopener noreferrer" : undefined}
               className="relative text-[15px] text-cocoa/80 transition-colors hover:text-cocoa after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-clay after:transition-all after:duration-200 hover:after:w-full"
             >
               {item.label}
@@ -84,6 +87,8 @@ export default function Header() {
               <a
                 key={item.href}
                 href={item.href}
+                target={item.external ? "_blank" : undefined}
+                rel={item.external ? "noopener noreferrer" : undefined}
                 onClick={() => setOpen(false)}
                 className="rounded-md px-2 py-3 text-[15px] text-cocoa/85 hover:bg-sand/50"
               >
