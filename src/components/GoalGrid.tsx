@@ -1,172 +1,101 @@
 "use client";
 
-import { useState } from "react";
+import React from "react";
 import Image from "next/image";
-import {
-  X,
-  MessageCircle,
-  ChevronLeft,
-  ChevronRight,
-  TrendingDown,
-  Activity,
-  Dumbbell,
-  Coffee,
-  Sparkles,
-  Clock,
-  HeartPulse,
-  Target,
-  Droplets,
-  Zap,
-  Briefcase,
-} from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { motion, type Variants } from "framer-motion";
+import { MessageCircle, Check, ArrowRight } from "lucide-react";
 import type { ProductGoal } from "@/data/business";
 import { buildWhatsAppRedirectLink } from "@/lib/links";
-import GoalTile from "@/components/GoalTile";
-
-// Icon components can't be passed as props from a server component, so the
-// mapping lives here, inside the client component that actually uses it.
-const icons: Record<string, LucideIcon> = {
-  "weight-loss": TrendingDown,
-  "flat-tummy": Activity,
-  "weight-gain-muscle-building": Dumbbell,
-  "healthy-breakfast": Coffee,
-  "hair-skin-care": Sparkles,
-  "healthy-aging": Clock,
-  "nutritional-goals": Target,
-  "digestive-health": Droplets,
-  "energy-fitness": Zap,
-  "heart-health": HeartPulse,
-  "business-opportunity": Briefcase,
-};
 
 type Props = {
   goals: readonly ProductGoal[];
 };
 
+const cardContainerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const cardItemVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.55,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
 export default function GoalGrid({ goals }: Props) {
-  const [activeId, setActiveId] = useState<string | null>(null);
-  const [imageIndex, setImageIndex] = useState(0);
-
-  const active = goals.find((g) => g.id === activeId) ?? null;
-
-  function open(id: string) {
-    setActiveId(id);
-    setImageIndex(0);
-  }
-
-  function close() {
-    setActiveId(null);
-  }
-
   return (
-    <>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        {goals.map((goal) => (
-          <button
+    <motion.div
+      variants={cardContainerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.1 }}
+      className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+    >
+      {goals.map((goal) => {
+        const hasImage = goal.images && goal.images.length > 0;
+        const mainImage = hasImage ? goal.images[0] : null;
+
+        return (
+          <motion.div
             key={goal.id}
-            type="button"
-            onClick={() => open(goal.id)}
-            className="text-left"
-            aria-haspopup="dialog"
+            variants={cardItemVariants}
+            className="group relative flex flex-col overflow-hidden rounded-3xl border border-cocoa/[0.08] bg-ivory/90 p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-moss/40 hover:shadow-xl"
           >
-            <GoalTile icon={icons[goal.id]} title={goal.title} />
-          </button>
-        ))}
-      </div>
-
-      {active && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label={active.title}
-          className="fixed inset-0 z-[60] flex items-end justify-center bg-cocoa/50 backdrop-blur-sm sm:items-center sm:p-6"
-          onClick={close}
-        >
-          <div
-            className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-t-[2rem] bg-cream shadow-2xl sm:rounded-[2rem]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              type="button"
-              onClick={close}
-              aria-label="Close"
-              className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-ivory/90 text-cocoa shadow-md transition-colors hover:bg-ivory"
-            >
-              <X size={18} strokeWidth={2} aria-hidden="true" />
-            </button>
-
-            {active.images.length > 0 && (
-              <div className="relative aspect-[4/3] w-full bg-sand">
+            {/* Directly Visible Product Image on Scroll — No Clicking Needed! */}
+            {mainImage && (
+              <div className="relative mb-4 aspect-[4/3] w-full overflow-hidden rounded-2xl bg-sand/30">
                 <Image
-                  src={active.images[imageIndex]}
-                  alt={active.title}
+                  src={mainImage}
+                  alt={`Herbalife ${goal.title}`}
                   fill
-                  sizes="(min-width: 640px) 512px, 100vw"
-                  className="object-cover"
+                  sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 90vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                {active.images.length > 1 && (
-                  <>
-                    <button
-                      type="button"
-                      aria-label="Previous image"
-                      onClick={() =>
-                        setImageIndex(
-                          (i) => (i - 1 + active.images.length) % active.images.length
-                        )
-                      }
-                      className="absolute left-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-ivory/90 text-cocoa shadow-md hover:bg-ivory"
-                    >
-                      <ChevronLeft size={16} aria-hidden="true" />
-                    </button>
-                    <button
-                      type="button"
-                      aria-label="Next image"
-                      onClick={() =>
-                        setImageIndex((i) => (i + 1) % active.images.length)
-                      }
-                      className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-ivory/90 text-cocoa shadow-md hover:bg-ivory"
-                    >
-                      <ChevronRight size={16} aria-hidden="true" />
-                    </button>
-                    <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
-                      {active.images.map((_, i) => (
-                        <span
-                          key={i}
-                          className={`h-1.5 w-1.5 rounded-full ${
-                            i === imageIndex ? "bg-ivory" : "bg-ivory/40"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  </>
-                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-cocoa/30 via-transparent to-transparent opacity-40" />
               </div>
             )}
 
-            <div className="p-7 sm:p-8">
-              <h3 className="text-2xl font-display font-medium leading-snug text-balance">
-                {active.title}
-              </h3>
-              <p className="mt-3 text-[15px] leading-relaxed text-stone">
-                {active.description}
-              </p>
+            <div className="flex flex-1 flex-col justify-between">
+              <div>
+                <h4 className="text-lg font-display font-bold text-cocoa transition-colors group-hover:text-moss">
+                  {goal.title}
+                </h4>
+                <p className="mt-2 text-xs sm:text-[13px] leading-relaxed text-stone">
+                  {goal.description}
+                </p>
+              </div>
 
-              <a
-                href={buildWhatsAppRedirectLink(
-                  `Hello Small Madam, I'm interested in ${active.title}. Can you tell me more?`
-                )}
-                data-cta="whatsapp"
-                data-cta-id={`product-${active.id}`}
-                className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full bg-moss px-6 py-3.5 text-[15px] font-medium text-ivory shadow-lg shadow-moss/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-moss-dark hover:shadow-xl active:scale-[0.98] sm:w-auto"
-              >
-                <MessageCircle size={18} strokeWidth={2} aria-hidden="true" />
-                Ask About {active.title}
-              </a>
+              <div className="mt-5 pt-4 border-t border-cocoa/[0.06] flex items-center justify-between">
+                <a
+                  href={buildWhatsAppRedirectLink(
+                    `Hello Small Madam, I'm interested in the ${goal.title} pack. Please let me know the price and delivery options.`
+                  )}
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-moss transition-colors group-hover:text-moss-dark"
+                >
+                  <MessageCircle size={14} />
+                  <span>Ask on WhatsApp</span>
+                  <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
+                </a>
+
+                <span className="text-[11px] font-medium text-stone/80">
+                  Doorstep Delivery
+                </span>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
-    </>
+          </motion.div>
+        );
+      })}
+    </motion.div>
   );
 }

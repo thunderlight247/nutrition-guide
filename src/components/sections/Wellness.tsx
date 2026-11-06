@@ -1,91 +1,54 @@
-import Image from "next/image";
 import { productGoals } from "@/data/business";
 import SectionHeader from "@/components/SectionHeader";
 import GoalGrid from "@/components/GoalGrid";
 import WhatsAppButton from "@/components/WhatsAppButton";
-
-const productImages = [
-  {
-    src: "/images/product-aloe.jpg",
-    alt: "Herbalife herbal aloe concentrate drink",
-  },
-  {
-    src: "/images/product-capsules.jpg",
-    alt: "Herbalife nutrition softgel supplement",
-  },
-  {
-    src: "/images/product-vitamin.jpg",
-    alt: "Herbalife vitamin and mineral complex for women",
-  },
-];
+import ProductPointerCallout from "@/components/ProductPointerCallout";
+import { AlertCircle, Target, Sparkles } from "lucide-react";
 
 export default function Wellness() {
   return (
     <section id="wellness" className="section-pad py-20 sm:py-28">
       <div className="mx-auto max-w-content">
-        <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-          <div>
-            <SectionHeader
-              kicker="Products"
-              title="What are you working toward?"
-              description="Tap a goal to see the products behind it and ask Small Madam directly — genuine Herbalife products for every goal below."
-            />
+        {/* Section Header */}
+        <div className="mx-auto max-w-2xl text-center mb-12 sm:mb-16">
+          <SectionHeader
+            kicker="Genuine Nutrition Products"
+            title="Everyday nutrition built around your body's needs"
+            description="Explore our proven Herbalife Healthy Breakfast routine and targeted goal packs below. All products appear directly with ingredients and benefits as you scroll."
+          />
+        </div>
 
-            <aside className="mt-8 rounded-2xl border border-clay/25 bg-clay/10 p-5 text-sm leading-relaxed text-cocoa">
-              <p className="font-semibold uppercase tracking-[0.14em] text-clay">
-                Important disclaimer
-              </p>
-              <p className="mt-2">
-                These products are food and nutritional supplements, not drugs
-                or medicine. They do not cure or treat any condition. Food
-                provides nutrition, and your body uses nutrition to support its
-                normal functions.
-              </p>
-            </aside>
+        {/* 1. Exact Video / WhatsApp Screenshot Product Pointer Callout */}
+        <ProductPointerCallout />
 
-            <div className="mt-10">
-              <GoalGrid goals={productGoals} />
-            </div>
-
-            <p className="mt-6 text-sm text-stone">
-              Looking for something specific? Reach out on WhatsApp for
-              current availability and pricing.
+        {/* 2. Targeted Goal Packs Directly Visible as You Scroll (No Click-to-Open Modal) */}
+        <div className="mt-24 pt-16 border-t border-cocoa/[0.08]">
+          <div className="mx-auto max-w-2xl text-center mb-12">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-moss/10 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-moss">
+              <Target size={13} />
+              <span>Targeted Solutions</span>
+            </span>
+            <h3 className="mt-3 text-3xl sm:text-4xl font-display font-bold text-cocoa">
+              Browse Targeted Body & Wellness Packs
+            </h3>
+            <p className="mt-2 text-stone text-sm sm:text-base">
+              Scroll through each program below to see the products and benefits directly.
             </p>
-
-            <div className="mt-6">
-              <WhatsAppButton ctaId="wellness" label="Ask About Products" />
-            </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 sm:gap-5">
-            <div className="group relative col-span-2 aspect-[16/10] overflow-hidden rounded-2xl bg-sand shadow-sm shadow-cocoa/[0.06]">
-              <Image
-                src={productImages[0].src}
-                alt={productImages[0].alt}
-                fill
-                sizes="(min-width: 1024px) 480px, 90vw"
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-              />
+          {/* Goal Grid: Cards show product photos and animated benefits immediately on scroll */}
+          <GoalGrid goals={productGoals} />
+
+          {/* Disclaimer Box */}
+          <aside className="mt-14 mx-auto max-w-2xl rounded-2xl border border-clay/20 bg-clay/[0.06] p-5 text-xs sm:text-sm leading-relaxed text-cocoa text-center backdrop-blur-sm">
+            <div className="inline-flex items-center gap-1.5 font-semibold uppercase tracking-wider text-clay text-xs">
+              <AlertCircle size={15} />
+              <span>Important Nutritional Disclaimer</span>
             </div>
-            <div className="group relative aspect-square overflow-hidden rounded-2xl bg-sand shadow-sm shadow-cocoa/[0.06]">
-              <Image
-                src={productImages[1].src}
-                alt={productImages[1].alt}
-                fill
-                sizes="(min-width: 1024px) 230px, 45vw"
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-            </div>
-            <div className="group relative aspect-square overflow-hidden rounded-2xl bg-sand shadow-sm shadow-cocoa/[0.06]">
-              <Image
-                src={productImages[2].src}
-                alt={productImages[2].alt}
-                fill
-                sizes="(min-width: 1024px) 230px, 45vw"
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-            </div>
-          </div>
+            <p className="mt-2 text-cocoa/90">
+              These products are food and nutritional supplements, not drugs or medicine. They do not diagnose, cure, or treat any condition. Food provides nutrition, and your body uses nutrition to support its normal, vital functions.
+            </p>
+          </aside>
         </div>
       </div>
     </section>
